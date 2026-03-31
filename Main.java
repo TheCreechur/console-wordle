@@ -1,6 +1,12 @@
 import java.util.Scanner;
 
 public class Main {
+    public static void random(){
+        
+    }
+    public static void custom(){
+
+    }
     public static void clear(){
         System.out.print("\033[H\033[2J");
         System.out.flush();
@@ -16,19 +22,16 @@ public class Main {
             choice = scan.nextLine();
             choice = choice.toLowerCase().replaceAll(" ", "");
             if (choice.equals("random")){
+                System.out.println("random");
                 picked = true;
             }else if (choice.equals("custom")){
+                boolean customChoice = false;
+                System.out.println("custom");
                 picked = true;
             }
             clear();
         }
-        if (choice.equals("random")){
-            System.out.println("random");
-        }else if (choice.equals("custom")){
-            System.out.println("custom");
-        }else{
-            System.out.println("Your code broke");
-        }
+
         
     }
 }
