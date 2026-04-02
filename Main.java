@@ -11,6 +11,8 @@ public class Main {
         int length = word.length();
         int tries = length;
         String[] guesses = new String[length];
+        boolean solved = false;
+        String finalGuess = "";
         for (int i = 0; i < length; i++) {
             guesses[i] = "";
             for (int h = 0; h < length; h++) {
@@ -28,6 +30,11 @@ public class Main {
                 System.out.println("");
                 choice = scan.nextLine();
             }
+            if (choice.equals(word)) {
+                i = length;
+                finalGuess = choice;
+                solved = true;
+            }
             choice = compareStrings(choice, word);
             guesses[length - tries] = choice;
             tries--;
@@ -35,6 +42,14 @@ public class Main {
         }
         scan.close();
         clear();
+        for (int h = 0; h < length; h++) {
+            System.out.println(guesses[h]);
+        }
+        if (solved) {
+            System.out.println("You won! you got " + finalGuess + " on your " + ((length - tries) + 1) + " try!");
+        } else {
+            System.out.println("You lost... your last guess was " + finalGuess + ".");
+        }
         System.out.println("The answer was: " + word);
     }
 
@@ -51,9 +66,39 @@ public class Main {
         int length = guess.length();
         String result = "";
         for (int i = 0; i < length; i++) {
+            int amountNeeded = guess.replaceAll(guess.substring(i, i + 1), "").length()
+                    - answer.replaceAll(guess.substring(i, i + 1), "").length();
+            int guessAmount = guess.length() - guess.replaceAll(guess.substring(i, i + 1), "").length();
+            int answerAmount = answer.length() - answer.replaceAll(guess.substring(i, i + 1), "").length();
             if (guess.substring(i, i + 1).equals(answer.substring(i, i + 1))) {
                 result += Codes.green + guess.substring(i, i + 1) + Codes.reset;
-            } else if (answer.contains(guess.substring(i, i + 1))) {
+            } else if ((amountNeeded == 0) && (answerAmount > 0)) {
+                result += Codes.yellow + guess.substring(i, i + 1) + Codes.reset;
+            } else if ((amountNeeded < 0) && (answerAmount > 0)) {
+                boolean yellow = false;
+                int found = 1;
+                for (int f = 0; f < length; f++) {
+                    if (guess.substring(f, f + 1).equals(guess.substring(i, i + 1))) {
+                        // System.out.println(f + " " + i);
+                        // System.out.println("Answer amount: " + answerAmount);
+                        if ((f != i) && (f < i)) {
+                            found++;
+                        }
+                        // System.out.println("Found: " + found);
+                        if (found <= answerAmount) {
+                            yellow = true;
+                        } else {
+                            yellow = false;
+                        }
+                        // System.out.println("yellow: " + yellow);
+                    }
+                }
+                if (yellow == true) {
+                    result += Codes.yellow + guess.substring(i, i + 1) + Codes.reset;
+                } else {
+                    result += guess.substring(i, i + 1);
+                }
+            } else if ((amountNeeded > 0) && (answerAmount > 0)) {
                 result += Codes.yellow + guess.substring(i, i + 1) + Codes.reset;
             } else {
                 result += guess.substring(i, i + 1);
@@ -147,8 +192,8 @@ public class Main {
                 }
             }
             clear();
-            scan.close();
         }
+        scan.close();
 
     }
 }
