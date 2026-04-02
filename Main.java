@@ -9,11 +9,12 @@ public class Main {
     public static void wordleGame(String word) {
         clear();
         int length = word.length();
-        int tries = length;
-        String[] guesses = new String[length];
+        int guessRows = length + 1;
+        int tries = guessRows;
+        String[] guesses = new String[guessRows];
         boolean solved = false;
         String finalGuess = "";
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < guessRows; i++) {
             guesses[i] = "";
             for (int h = 0; h < length; h++) {
                 guesses[i] += "#";
@@ -21,10 +22,10 @@ public class Main {
         }
         Scanner scan = new Scanner(System.in);
         String choice = "";
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < guessRows; i++) {
             while ((choice.toLowerCase().replaceAll("[^A-Za-z]+", "").length() != length) || (!isWord(choice))) {
                 clear();
-                for (int h = 0; h < length; h++) {
+                for (int h = 0; h < guessRows; h++) {
                     System.out.println(guesses[h]);
                 }
                 System.out.println("");
@@ -36,7 +37,7 @@ public class Main {
                 solved = true;
             }
             choice = compareStrings(choice, word);
-            guesses[length - tries] = choice;
+            guesses[guessRows - tries] = choice;
             tries--;
             choice = "";
         }
